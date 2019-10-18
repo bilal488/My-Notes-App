@@ -1,4 +1,4 @@
-package com.technohem.mynotesapp;
+package com.technohem.mynotesapp.activity.editor;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,19 +11,23 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.technohem.mynotesapp.R;
+import com.technohem.mynotesapp.api.ApiClient;
+import com.technohem.mynotesapp.api.ApiInterface;
+import com.technohem.mynotesapp.model.Note;
 import com.thebluealliance.spectrum.SpectrumPalette;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements EditorView {
 
     EditText et_title, et_note;
     ProgressDialog progressDialog;
     SpectrumPalette palette;
 
-    ApiInterface apiInterface;
+    EditorPresenter presenter;
 
     int color;
 
@@ -47,6 +51,8 @@ public class EditorActivity extends AppCompatActivity {
         // progress dialog
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");
+
+        presenter = new EditorPresenter(this);
     }
 
     @Override
@@ -71,7 +77,7 @@ public class EditorActivity extends AppCompatActivity {
                 } else if (note.isEmpty()) {
                     et_note.setError("Please enter a note");
                 } else {
-                    saveNote(title, note, color);
+                    presenter.saveNote(title, note, color);
                 }
                 return true;
             default:
@@ -80,35 +86,24 @@ public class EditorActivity extends AppCompatActivity {
 
     }
 
-    private void saveNote(final String title, final String note, final int color) {
-
+    @Override
+    public void showProgress() {
         progressDialog.show();
+    }
 
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Note> call = apiInterface.saveNote(title, note, color);
+    @Override
+    public void hideProgress() {
+        progressDialog.hide();
+    }
 
-        call.enqueue(new Callback<Note>() {
-            @Override
-            public void onResponse(@NonNull Call<Note> call, @NonNull Response<Note> response) {
-                progressDialog.dismiss();
+    @Override
+    public void onAddSuccess(String message) {
+        Toast.makeText(EditorActivity.this, message, Toast.LENGTH_SHORT).show();
+        finish(); //back to main activity
+    }
 
-                if (response.isSuccessful() && response.body() != null) {
-                    Boolean success = response.body().getSuccess();
-                    if (success) {
-                        Toast.makeText(EditorActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        finish(); //back to main activity
-                    } else {
-                        Toast.makeText(EditorActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        // if error, still in this act
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Note> call, @NonNull Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(EditorActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+    @Override
+    public void onAddError(String message) {
+        Toast.makeText(EditorActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

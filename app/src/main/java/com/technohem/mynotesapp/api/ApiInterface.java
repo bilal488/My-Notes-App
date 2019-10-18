@@ -1,4 +1,6 @@
-package com.technohem.mynotesapp;
+package com.technohem.mynotesapp.api;
+
+import com.technohem.mynotesapp.model.Note;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

@@ -1,4 +1,4 @@
-package com.technohem.mynotesapp;
+package com.technohem.mynotesapp.activity.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.technohem.mynotesapp.R;
+import com.technohem.mynotesapp.activity.editor.EditorActivity;
 
 /**
  * https://www.youtube.com/watch?v=Vh92eSAEu5c&list=PLT3-dzFEBix379Q2s31apenJtBPOFSVZZ&index=1
