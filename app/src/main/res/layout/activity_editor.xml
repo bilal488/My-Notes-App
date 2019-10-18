@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".EditorActivity">
 
     <RelativeLayout
@@ -16,7 +16,7 @@
         <EditText
             android:id="@+id/title"
             android:hint="@string/to_do"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:inputType="textCapSentences"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,6 +32,15 @@
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <com.thebluealliance.spectrum.SpectrumPalette
+            android:id="@+id/palette"
+            android:layout_below="@+id/note"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:spectrum_colors="@array/demo_colors"/>
 
     </RelativeLayout>
 
