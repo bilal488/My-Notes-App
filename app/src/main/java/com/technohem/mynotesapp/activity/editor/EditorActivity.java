@@ -3,6 +3,7 @@ package com.technohem.mynotesapp.activity.editor;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -125,6 +126,23 @@ public class EditorActivity extends AppCompatActivity implements EditorView {
                 } else {
                     presenter.updateNote(id, title, note, color);
                 }
+
+                return true;
+
+            case R.id.delete:
+                //delete
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle("Confirm !");
+                alertDialog.setMessage("Are you sure?");
+                alertDialog.setNegativeButton("Yes", (dialog, which) -> {
+                    dialog.dismiss();
+                    presenter.deleteNote(id);
+                });
+                alertDialog.setPositiveButton("Cancel",
+                        (dialog, which) -> dialog.dismiss());
+
+                alertDialog.show();
 
                 return true;
 
