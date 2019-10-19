@@ -1,5 +1,6 @@
 package com.technohem.mynotesapp.activity.main;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 
+    private static final int INTENT_ADD = 100;
+    private static final int INTENT_EDIT = 200;
     FloatingActionButton fab;
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefresh;
@@ -43,7 +46,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         fab = findViewById(R.id.add);
         fab.setOnClickListener(view ->
-                startActivity(new Intent(this, EditorActivity.class))
+                startActivityForResult(
+                        new Intent(this, EditorActivity.class),
+                        INTENT_ADD)
         );
 
         presenter = new MainPresenter(this);
@@ -54,9 +59,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         );
 
         itemClickListener = ((view, position) -> {
-            String title = note.get(position).getTitle();
-            Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
-            /*int id = note.get(position).getId();
+            int id = note.get(position).getId();
             String title = note.get(position).getTitle();
             String notes = note.get(position).getNote();
             int color = note.get(position).getColor();
@@ -65,8 +68,21 @@ public class MainActivity extends AppCompatActivity implements MainView {
             intent.putExtra("id", id);
             intent.putExtra("title", title);
             intent.putExtra("note", notes);
-            intent.putExtra("color", color);*/
+            intent.putExtra("color", color);
+            startActivityForResult(intent, INTENT_EDIT);
         });
+    } // on create end
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == INTENT_ADD && resultCode == RESULT_OK) {
+            presenter.getData(); //reload data
+        }
+        else if (requestCode == INTENT_EDIT && resultCode == RESULT_OK) {
+            presenter.getData(); //reload data
+        }
     }
 
     @Override
